@@ -1,48 +1,39 @@
-import string
 import random
+import string
 
-# Getting password length
-length = int(input("Enter password length: "))
+def generate_password(length):
+    if length < 4:
+        return "Password length should be at least 4 characters for good security."
 
-print('''Choose character set for password from these : 
-         1. Digits
-         2. Letters
-         3. Special characters
-         4. Exit''')
+    # Character sets
+    lowercase = string.ascii_lowercase
+    uppercase = string.ascii_uppercase
+    digits = string.digits
+    symbols = string.punctuation
 
-characterList = ""
+    # Combine all character sets
+    all_characters = lowercase + uppercase + digits + symbols
 
-# Getting character set for password
-while(True):
-    choice = int(input("Pick a number "))
-    if(choice == 1):
-        
-        # Adding letters to possible characters
-        characterList += string.ascii_letters
-    elif(choice == 2):
-        
-        # Adding digits to possible characters
-        characterList += string.digits
-    elif(choice == 3):
-        
-        # Adding special characters to possible
-        # characters
-        characterList += string.punctuation
-    elif(choice == 4):
-        break
-    else:
-        print("Please pick a valid option!")
+    # Ensure password includes at least one of each type for strength
+    password = [
+        random.choice(lowercase),
+        random.choice(uppercase),
+        random.choice(digits),
+        random.choice(symbols),5
+    ]
 
-password = []
+    # Fill the rest with random characters
+    password += random.choices(all_characters, k=length - 4)
 
-for i in range(length):
-  
-    # Picking a random character from our 
-    # character list
-    randomchar = random.choice(characterList)
-    
-    # appending a random character to password
-    password.append(randomchar)
+    # Shuffle to avoid predictable pattern
+    random.shuffle(password)
 
-# printing password as a string
-print("The random password is " + "".join(password))
+    return ''.join(password)
+
+# User Input
+try:
+    user_length = int(input("Enter the desired password length: "))
+    result = generate_password(user_length)
+    print("Generated Password:", result)
+except ValueError:
+    print("Please enter a valid number.")
